@@ -7,7 +7,7 @@ import time
 import confs
 import utils
 
-import motion
+import lib
 
 CONF = confs.Configs()
 if CONF.is_pi is True:
@@ -45,4 +45,6 @@ def capture_motion(trigger):
         time.sleep(SLEEP)
 
 setup_pins()
-capture_motion(motion.Trigger())
+
+lib.Alive('iseeyou').begin_keep_alive()
+capture_motion(lib.Trigger())
