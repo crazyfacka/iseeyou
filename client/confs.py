@@ -11,6 +11,7 @@ class Configs(object):
 
     debug = False
     pir_pin = 4
+    internet = None
 
     def __init__(self):
         if Configs._confs_loaded:
@@ -24,8 +25,9 @@ class Configs(object):
     def __str__(self):
         return """Debug: %s
 PIR Pin: %s
+Internet: %s
 Is PI: %s
-""" % (self.debug, self.pir_pin, self.is_pi())
+""" % (self.debug, self.pir_pin, self.internet, self.is_pi())
 
     @staticmethod
     def _load_confs():
@@ -39,6 +41,7 @@ Is PI: %s
         """Read values from the configuration file"""
         Configs.debug = cfg.get('Main', 'Debug')
         Configs.pir_pin = cfg.get('Main', 'PIRPin')
+        Configs.internet = cfg.get('Main', 'Internet')
 
     @staticmethod
     def is_pi():

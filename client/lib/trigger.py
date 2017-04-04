@@ -4,6 +4,7 @@ import json
 import time
 
 import utils
+from gateway import Gateway
 
 L = utils.Utils().log
 
@@ -35,3 +36,4 @@ class Trigger(object):
         }
 
         L('%s', json.dumps(data))
+        Gateway.send_update(data)
