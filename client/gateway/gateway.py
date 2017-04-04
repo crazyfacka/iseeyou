@@ -1,6 +1,6 @@
 """This class posts information to the outside world"""
 
-import threading
+import Queue
 
 import utils
 
@@ -11,13 +11,14 @@ L = utils.Utils().log
 class Gateway(object):
     """Gateway class"""
     gateway = None
+    queue = Queue.Queue()
 
     @staticmethod
     def internet():
-        """Returns an internet gateway"""
+        """Creates an internet gateway"""
         if Gateway.gateway is None:
-            Gateway.gateway = http.HTTP()
-        return Gateway.gateway
+            Gateway.gateway = http.HTTP(Gateway.queue)
+            Gateway.gateway.start()
 
     @staticmethod
     def send_update(data):
@@ -25,9 +26,7 @@ class Gateway(object):
         if Gateway.gateway is None:
             L('Error: gateway not defined')
             return
-        thread = threading.Thread(target=Gateway.gateway.send_update, args=(data))
-        thread.daemon = True
-        thread.start()
+        Gateway.queue.put({"type": "update", "data": data})
 
     @staticmethod
     def send_alive(data):
@@ -35,6 +34,4 @@ class Gateway(object):
         if Gateway.gateway is None:
             L('Error: gateway not defined')
             return
-        thread = threading.Thread(target=Gateway.gateway.send_alive, args=(data))
-        thread.daemon = True
-        thread.start()
+        Gateway.queue.put({"type": "alive", "data": data})

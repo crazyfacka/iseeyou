@@ -6,6 +6,7 @@ import time
 
 import confs
 import utils
+from gateway import Gateway
 
 import lib
 
@@ -45,6 +46,9 @@ def capture_motion(trigger):
         time.sleep(SLEEP)
 
 setup_pins()
+
+if CONF.gateway == 'http':
+    Gateway.internet()
 
 lib.Alive('iseeyou').begin_keep_alive()
 capture_motion(lib.Trigger())
