@@ -1,2 +1,4 @@
 *.pyc
 confs.ini
+server/server
+server/confs.toml

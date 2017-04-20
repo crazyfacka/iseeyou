@@ -5,6 +5,7 @@ import time
 import threading
 
 import utils
+from gateway import Gateway
 
 L = utils.Utils().log
 
@@ -30,4 +31,5 @@ class Alive(object):
             }
 
             L('%s', json.dumps(data))
+            Gateway.send_alive(data)
             time.sleep(60)
