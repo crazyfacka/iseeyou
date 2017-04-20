@@ -28,5 +28,19 @@ func main() {
 		return c.String(http.StatusBadRequest, commons.GetJSONMessage("error processing request"))
 	})
 
+	e.PUT("/motion", func(c echo.Context) error {
+		var msg []byte
+		var err error
+
+		if msg, err = ioutil.ReadAll(c.Request().Body); err == nil {
+			commons.Debug("[MOTION] Received motion message: '%s'", string(msg))
+			if i.StoreMotion(msg) {
+				return c.String(http.StatusOK, commons.GetJSONMessage("ok"))
+			}
+		}
+
+		return c.String(http.StatusBadRequest, commons.GetJSONMessage("error processing request"))
+	})
+
 	e.Logger.Fatal(e.Start(":9000"))
 }
