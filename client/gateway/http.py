@@ -35,10 +35,10 @@ class HTTP(threading.Thread):
 
     def _send_update(self, data):
         """Sends a motion update"""
-        rsp = requests.put(self.endpoint_update, data=data, headers=self.headers)
+        rsp = requests.put(self.endpoint_update, json=data, headers=self.headers)
         L('PUT: %s', rsp.text)
 
     def _send_alive(self, data):
         """Sends a keepalive message"""
-        rsp = requests.post(self.endpoint_alive, data=data, headers=self.headers)
+        rsp = requests.post(self.endpoint_alive, json=data, headers=self.headers)
         L('ALIVE: %s', rsp.text)

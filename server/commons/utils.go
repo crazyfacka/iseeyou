@@ -22,3 +22,8 @@ func Debug(message interface{}, args ...interface{}) {
 		}
 	}
 }
+
+// GetJSONMessage returns a JSON struct with the message inside
+func GetJSONMessage(msg string) string {
+	return "{\"message\": \"" + msg + "\"}"
+}
