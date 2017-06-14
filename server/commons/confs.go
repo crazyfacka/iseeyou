@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Debug bool
 	SQL   sql
+	API   api
 }
 
 type sql struct {
@@ -18,6 +19,10 @@ type sql struct {
 	User     string
 	Password string
 	DBName   string
+}
+
+type api struct {
+	Port int64
 }
 
 var cfg Config
