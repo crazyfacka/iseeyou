@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/crazyfacka/iseeyou/server/commons"
+	"github.com/crazyfacka/iseeyou/server/structs"
 	_ "github.com/go-sql-driver/mysql" // SQL Driver
 )
 
@@ -76,6 +77,31 @@ func (s *SQL) StoreMotion(motion int64, duration float64, start float64) bool {
 
 	commons.Debug("[SQL] ID = %d, affected = %d", lastID, rowCnt)
 	return true
+}
+
+// GetLastMotion returns last ten motion changes
+func (s *SQL) GetLastMotion() ([]*structs.Motion, error) {
+	var pos int
+	motionsToRetrieve := 10
+	motions := make([]*structs.Motion, motionsToRetrieve)
+
+	rows, err := s.db.Query("SELECT id, motion, duration, start FROM motion HAVING id > (SELECT MAX(id) FROM motion)-?", motionsToRetrieve)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		m := &structs.Motion{}
+		err := rows.Scan(m.ID, m.Motion, m.Duration, m.Start)
+		if err != nil {
+			return nil, err
+		}
+		motions[pos] = m
+		pos++
+	}
+
+	return motions, nil
 }
 
 // GetSQLHandler intatiates this handler

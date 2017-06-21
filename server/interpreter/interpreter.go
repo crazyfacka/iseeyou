@@ -5,6 +5,7 @@ import (
 
 	"github.com/crazyfacka/iseeyou/server/commons"
 	"github.com/crazyfacka/iseeyou/server/handler"
+	"github.com/crazyfacka/iseeyou/server/structs"
 )
 
 // Interpreter core struct
@@ -57,6 +58,21 @@ func (i *Interpreter) StoreMotion(msg []byte) bool {
 	}
 
 	return i.sqlh.StoreMotion(int64(motion), duration, start)
+}
+
+// GetLatest gets the last motion information
+func (i *Interpreter) GetLatest() (string, error) {
+	var motions []*structs.Motion
+	var data []byte
+	var err error
+
+	if motions, err = i.sqlh.GetLastMotion(); err == nil {
+		if data, err = json.Marshal(motions); err == nil {
+			return string(data), nil
+		}
+	}
+
+	return "", err
 }
 
 // GetInterpreter intatiates this interpreter

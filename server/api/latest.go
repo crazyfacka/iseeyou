@@ -8,5 +8,9 @@ import (
 )
 
 func (api *API) getLatest(c echo.Context) error {
+	if data, err := api.i.GetLatest(); err == nil {
+		return c.String(http.StatusOK, data)
+	}
+
 	return c.String(http.StatusServiceUnavailable, commons.GetJSONMessage("Error retrieving information"))
 }
